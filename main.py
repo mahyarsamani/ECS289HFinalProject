@@ -1,53 +1,147 @@
+############### IMPORTED LIBARIES AND PACKAGES ###############
+
 import dash
-import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
 import dash_core_components as dcc
 import dash_html_components as html
-from dash.dependencies import Input, Output
 import plotly.graph_objs as go
-import plotly.express as px
+import plotly.express  as px
 import pandas as pd
+import numpy as np
+from dash.dependencies import Input, Output
+from sklearn.decomposition import PCA
+from sklearn.model_selection import train_test_split
+from scipy import stats
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import confusion_matrix
+from sklearn.metrics import accuracy_score
 
+import plotly.express as px
 
-colors = {
-    'background': '#A9A9A9',
-    'view': '#D3D3D3',
-    'text': '#23395D'
-}
+############### LOADING DATASET AND DATASET PRE-PROCESSING ###############
 
-# Load the dataset and manage unknown values
-df = pd.read_csv('dataset.csv', encoding = 'ISO-8859-1')
-# nans = df.isna()
-# cols = df.columns
-# num_nan = len(df) - df.count()
-# df = pd.DataFrame(df, columns = cols[num_nan < (len(df) * 0.5)])
-# df = df.fillna(df.mean())
+df1 = pd.read_csv('dataset3.csv', encoding='ISO-8859-1')
+
+############## EXTRACTING DESIRED VARIABLES FOR THE REST OF THE PROGRAM ################
+
+############## VISUALIZATION AND INTERACTION AND DATA ANALYSIS ##############
 
 app = dash.Dash()
-app.layout = html.Div(style = {'backgroundColor': colors['background']}, children = [
-    dcc.Dropdown(
-            id = 'cpu_model',
-            options = [
-                {'label': 'kvm', 'value': 'kvm'},
-                {'label': 'atomic', 'value': 'atomic'},
-                {'label': 'simple', 'value': 'simple'},
-                {'label': 'o3', 'value': 'o3'},
-            ],
-            value = 'kvm',
-            placeholder = 'Select a cpu model',
-        ),
-        dcc.Graph(id = 'boot_exit')
-])
+app.layout = html.Div([ 
+  #####################################################################
+  # --------------------- Div View 1 ---------------------
+	html.Div([ 
+        # ---------- Histograms
+		html.Div([
+            dcc.Input(
+                id="V1_variable_selection_msg", type="text",
+                value = 'Select a variable:',
+                placeholder="",readOnly = True,
+                style={'width': '49%','backgroundColor': '#f8f8f8', 'display': 'inline-block','border':'none','whiteSpace': 'pre-line',})
+        ]),
+        html.Div([
+            dcc.Dropdown(
+                id='V1_var_hist',
+                options=[{'label': i, 'value': i} for i in df1.columns],
+                value='experiment'
+            )
+        ], style={'width': '49%', 'display': 'inline-block'}),
+        
+        
+        html.Div([
+            dcc.Graph(id="V1_graph_histogram", style={'width': '40%', 'display': 'inline-block'})
+            
+        ]),
+        # ---------- Div Stacked Bars
+        html.Div([
+            dcc.Dropdown(
+                id="V1_Var1_Stacked_Bars",
+                options=[{
+                    'label': i,
+                    'value': i
+                } for i in df1.columns],
+                value='result'),
+            dcc.Dropdown(
+                id="V1_Var2_Stacked_Bars",
+                options=[{
+                    'label': i,
+                    'value': i
+                } for i in df1.columns],
+                value='result'),
+            dcc.Dropdown(
+                id="V1_Var3_Stacked_Bars",
+                options=[{
+                    'label': i,
+                    'value': i
+                } for i in df1.columns],
+                value='result'),
+            dcc.Dropdown(
+                id="V1_Var4_Stacked_Bars",
+                options=[{
+                    'label': i,
+                    'value': i
+                } for i in df1.columns],
+                value='result')
+        ], style={'width': '25%','display': 'inline-block'}),
+        
+        dcc.Graph(id='V1_graph_stackedbar'),
+        
+        
+    ])  
+  
+   # ---------- Div Divider
+        
+   #####################################################################
+   # --------------------- Div View 2 ---------------------
+    
+  #####################################################################
+   # --------------------- Div View 3 ---------------------
+   
+],style={'backgroundColor': '#f8f8f8'},)
 
+
+
+
+#-------------------------------- View 1 Callbacks
+### Histogram
 @app.callback(
-    Output(component_id = 'boot_exit', component_property = 'figure'),
-    [Input(component_id ='cpu_model', component_property = 'value')]
-)
-def update_v1_hist(cpu_model, range):
+    Output(component_id = 'V1_graph_histogram', component_property = 'figure'),
+    [Input(component_id = 'V1_var_hist',        component_property = 'value')])
+def update_graph_hist(ColName):
 
-    mydf = df[(df['disk_name'] == 'boot-exit') & (df['param0'] == cpu_model)][['param1', 'host time', 'sim_insts']]
-    mydf = mydf.groupby('param1').mean().reset_index()[['param1', 'host time', 'sim_insts']]
-    plot = px.bar(histdf, x = 'param1', y = 'sim_insts')
+    return {
+        'data': [go.Histogram(
+                    x = df1[ColName],
+                    text = ColName)
+            ],
+        'layout': go.Layout(
+            xaxis={
+                'title': ColName,
+            },
+            yaxis={
+                'title': 'Frequency',
+            },
+            margin={'l': 100, 'b': 30, 't': 10, 'r': 0},
+            height=300,
+            hovermode='closest'
+        )
+    }
 
-    return plot
+### Stacked Bars
+@app.callback(
+    Output(component_id = 'V1_graph_stackedbar',  component_property = 'figure'),
+    [Input(component_id = 'V1_Var1_Stacked_Bars', component_property = 'value'),
+     Input(component_id = 'V1_Var2_Stacked_Bars', component_property = 'value'),
+     Input(component_id = 'V1_Var3_Stacked_Bars', component_property = 'value'),
+     Input(component_id = 'V1_Var4_Stacked_Bars', component_property = 'value')])
+def update_graph_stackedbar(V1_Var1_Stbr, V1_Var2_Stbr, V1_Var3_Stbr, V1_Var4_Stbr):
+    print(V1_Var4_Stbr)
+    fig = px.bar(df1, x=V1_Var1_Stbr, y=V1_Var2_Stbr, color=V1_Var3_Stbr, hover_data=[V1_Var4_Stbr], barmode = 'group')
+    return fig
+
+
+
+
+
+if __name__ == '__main__':
+    app.run_server()
