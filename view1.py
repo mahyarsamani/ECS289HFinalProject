@@ -29,13 +29,14 @@ statColor = {
 
 ############### LOADING DATASET AND DATASET PRE-PROCESSING ###############
 
-df1 = pd.read_csv('DatasetWithNA.csv', encoding='ISO-8859-1')
+df1 = pd.read_csv('dataset3.csv', encoding='ISO-8859-1')
 
 ############## EXTRACTING DESIRED VARIABLES FOR THE REST OF THE PROGRAM ################
+df1['ncpus'] = df1['ncpus'].astype(object)
 df1cols = df1.columns
 num_cols = df1.select_dtypes(include=[np.number]).columns
 cat_cols = df1.select_dtypes(exclude=[np.number]).columns
-
+print(cat_cols)
 ############## VISUALIZATION AND INTERACTION AND DATA ANALYSIS ##############
 
 app = dash.Dash()
@@ -116,11 +117,56 @@ app.layout = html.Div([
         ], style={'width': '25%','display': 'inline-block'}),
         
         dcc.Graph(id='V1_graph_bar'),
+    
         
+        # ---------- Div Scatter
+        html.Div([
+            dcc.Dropdown(
+                id="V1_Var1_Scat",
+                options=[{
+                    'label': i,
+                    'value': i
+                } for i in num_cols],
+                value= num_cols[2]),
+            
+            dcc.Dropdown(
+                id="V1_Var2_Scat",
+                options=[{
+                    'label': i,
+                    'value': i
+                } for i in num_cols],
+                value= num_cols[1]),
+
+            dcc.Dropdown(
+                id="V1_Var3_Scat",
+                options=[{
+                    'label': i,
+                    'value': i
+                } for i in cat_cols],
+                value= cat_cols[1]),
+            html.Div([
+                dcc.Dropdown(
+                    id="V1_Var3Scat_lvls",
+                    multi=True),
+            ], style={'display': 'block'}),
+
+            dcc.Dropdown(
+                id="V1_Var4_Scat",
+                options=[{'label': i, 'value': i} for i in cat_cols],
+                value= cat_cols[2],
+            ),
+
+            html.Div([
+                dcc.Dropdown(
+                    id="V1_Var4Scat_lvls",
+                    multi=True),
+            ], style={'display': 'block'}),
+
+        ], style={'width': '25%','display': 'inline-block'}),
         
-    ]),  
-  
-   # ---------- Div Divider
+        dcc.Graph(id='V1_Graph_Scat'),
+        
+    ]),
         
    #####################################################################
    # --------------------- Div View 2 ---------------------
@@ -235,6 +281,66 @@ def update_V1_lvl4_opt(V1_Var4):
 def update_V1_lvl4_val(V1_Var4):
     return df1[V1_Var4].unique()
 
+
+
+
+#####################################################################################
+#####################################################################################
+
+
+##----BAR FIGURE ----------------------------------------------------------------------##
+@app.callback(
+   Output(component_id = 'V1_Graph_Scat', component_property = 'figure'),
+   [Input(component_id = 'V1_Var1_Scat', component_property = 'value'),
+    Input(component_id = 'V1_Var2_Scat', component_property = 'value'),
+    Input(component_id = 'V1_Var3_Scat', component_property = 'value'),
+    Input(component_id = 'V1_Var3Scat_lvls', component_property = 'value'),
+    Input(component_id = 'V1_Var4_Scat', component_property = 'value'),
+    Input(component_id = 'V1_Var4Scat_lvls', component_property = 'value'),
+    ])
+def update_graph_scatter(mVar1, mVar2, var3, lvls3, facet1, fac1Lvls):
+   tmpdf = pd.DataFrame(df1, columns = [mVar1, mVar2, var3, facet1]) 
+   tmpdf = tmpdf[tmpdf[var3].isin(lvls3)]
+   tmpdf = tmpdf[tmpdf[facet1].isin(fac1Lvls)]
+   tmpdf = tmpdf.groupby(by = [var3, facet1],as_index=False).mean()
+   fig = px.scatter(tmpdf, x=mVar1, y=mVar2, color=var3, facet_col=facet1)    
+   return fig
+  
+
+##----Scat VAR3 LEVELS ----------------------------------------------------------------------##
+
+@app.callback(
+    Output(component_id = 'V1_Var3Scat_lvls',  component_property = 'options'),
+    [Input(component_id = 'V1_Var3_Scat',  component_property = 'value'),
+     ])
+def update_V1_Var3Scat_lvls_opt(V1_Var3Scat):
+    opts=[{'label':lvl, 'value':lvl} for lvl in df1[V1_Var3Scat].unique()]
+    return opts
+
+@app.callback(
+    Output(component_id = 'V1_Var3Scat_lvls',  component_property = 'value'),
+    [Input(component_id = 'V1_Var3_Scat',  component_property = 'value'),
+     ])
+def update_V1_Var3Scat_val(V1_Var3Scat):
+    return df1[V1_Var3Scat].unique()
+
+
+##----BAR VAR4 LEVELS ----------------------------------------------------------------------##
+
+@app.callback(
+    Output(component_id = 'V1_Var4Scat_lvls', component_property = 'options'),
+    [Input(component_id = 'V1_Var4_Scat',     component_property = 'value'),
+     ])
+def update_Var4Scat_lvls_opt(V1_Var4Scat):
+    opts=[{'label':lvl, 'value':lvl} for lvl in df1[V1_Var4Scat].unique()]
+    return opts
+
+@app.callback(
+    Output(component_id = 'V1_Var4Scat_lvls',  component_property = 'value'),
+    [Input(component_id = 'V1_Var4_Scat',  component_property = 'value'),
+     ])
+def update_Var4Scat_lvls_val(V1_Var4Scat):
+    return df1[V1_Var4Scat].unique()
 
 
 if __name__ == '__main__':
