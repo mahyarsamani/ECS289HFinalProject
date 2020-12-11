@@ -226,6 +226,23 @@ app.layout = html.Div([
                     multi=True),
             ], style={'display': 'block'}),
 
+            dcc.Dropdown(
+                id="V5_Var5_Scat",
+                options=[{
+                    'label': i,
+                    'value': i
+                } for i in num_cols],
+                value= 'host_op_rate'),
+
+            dcc.Checklist(
+                id = 'V1_Logarithmic_Scat',
+                options=[
+                    {'label': 'X->Logarithmic', 'value': 'LogX'},
+                    {'label': 'Y->Logarithmic', 'value': 'LogY'},
+                ],
+                value=['LogX']
+) 
+
         ], style={'width': '25%','display': 'inline-block'}),
         
         dcc.Graph(id='V1_Graph_Scat'),
@@ -367,14 +384,23 @@ def update_V1_lvl4_val(V1_Var4):
     Input(component_id = 'V1_Var3Scat_lvls', component_property = 'value'),
     Input(component_id = 'V1_Var4_Scat',     component_property = 'value'),
     Input(component_id = 'V1_Var4Scat_lvls', component_property = 'value'),
+    Input(component_id = 'V5_Var5_Scat', component_property = 'value'),
+    Input(component_id = 'V1_Logarithmic_Scat', component_property = 'value')
     ])
-def update_graph_scatter(mVar1, mVar2, var3, lvls3, facet1, fac1Lvls):
-   tmpdf = pd.DataFrame(df1, columns = [mVar1, mVar2, var3, facet1]) 
-   tmpdf = tmpdf[tmpdf[var3].isin(lvls3)]
-   tmpdf = tmpdf[tmpdf[facet1].isin(fac1Lvls)]
+def update_graph_scatter(mVar1, mVar2, var3, lvls3, facet1, fac1Lvls, mVar3,Log_Flag):
+    tmpdf = pd.DataFrame(df1, columns = [mVar1, mVar2, var3, facet1,mVar3]) 
+    tmpdf = tmpdf[tmpdf[var3].isin(lvls3)]
+    tmpdf = tmpdf[tmpdf[facet1].isin(fac1Lvls)]
 #    tmpdf = tmpdf.groupby(by = [var3, facet1],as_index=False).mean()
-   fig = px.scatter(tmpdf, x=mVar1, y=mVar2, color=var3, facet_col=facet1,log_x=True,log_y==True)    
-   return fig
+    Logx_Flag = False
+    Logy_Flag = False
+    if 'LogX' in Log_Flag:
+        Logx_Flag = True
+    if 'LogY' in Log_Flag:
+        Logy_Flag = True
+
+    fig = px.scatter(tmpdf, x=mVar1, y=mVar2, size=mVar3, color=var3, facet_col=facet1,log_x=Logx_Flag,log_y=Logy_Flag)    
+    return fig
   
 
 ##----Scat VAR3 LEVELS ----------------------------------------------------------------------##
@@ -430,15 +456,20 @@ def update_Var4Scat_lvls_val(V1_Var4Scat):
     Input(component_id = 'V1_Var5Tile_lvls', component_property = 'value'),
     ])
 def update_graph_tile(var1, lvl1, var2, lvl2, var3, lvl3, var4, lvl4, var5, lvl5):
-  tmpdf = pd.DataFrame(df1, columns = [var1, var2, var3, var4, var5, 'sim_freq']) 
-  tmpdf = tmpdf[tmpdf[var1].isin(lvl1)]
-  tmpdf = tmpdf[tmpdf[var2].isin(lvl2)]
-  tmpdf = tmpdf[tmpdf[var3].isin(lvl3)]
-  tmpdf = tmpdf[tmpdf[var4].isin(lvl4)]
-  tmpdf = tmpdf[tmpdf[var5].isin(lvl5)]
-  #tmpdf = df1.groupby(by = [var1, var2, var3, var4, var5],as_index=False).mean()
-  fig = px.treemap(tmpdf, path=[var1, var2, var3, var4, var5], values='sim_freq')
-  return fig
+    tmpdf = pd.DataFrame(df1, columns = [var1, var2, var3, var4, var5, 'sim_freq'])
+    if(~tmpdf[tmpdf[var1].isin(lvl1)].empty):
+        tmpdf = tmpdf[tmpdf[var1].isin(lvl1)]
+    if(~tmpdf[tmpdf[var2].isin(lvl2)].empty):
+        tmpdf = tmpdf[tmpdf[var2].isin(lvl2)]
+    if(~tmpdf[tmpdf[var3].isin(lvl3)].empty):
+        tmpdf = tmpdf[tmpdf[var3].isin(lvl3)]
+    if(~tmpdf[tmpdf[var4].isin(lvl4)].empty):
+        tmpdf = tmpdf[tmpdf[var4].isin(lvl4)]
+    if(~tmpdf[tmpdf[var5].isin(lvl5)].empty):
+        tmpdf = tmpdf[tmpdf[var5].isin(lvl5)]
+    #tmpdf = df1.groupby(by = [var1, var2, var3, var4, var5],as_index=False).mean()
+    fig = px.treemap(tmpdf, path=[var1, var2, var3, var4, var5], values='sim_freq')
+    return fig
  
 
 ##----TILE VAR1 LEVELS ----------------------------------------------------------------------##
