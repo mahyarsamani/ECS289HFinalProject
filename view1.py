@@ -41,35 +41,37 @@ cat_cols = df1.select_dtypes(exclude=[np.number]).columns
 ############## VISUALIZATION AND INTERACTION AND DATA ANALYSIS ##############
 
 app = dash.Dash()
-app.layout = html.Div([ 
-  
-  # --------------------- Div View 1 ---------------------
-	html.Div([ 
-        # ---------- Histograms
-		html.Div([
-            dcc.Input(
-                id="V1_variable_selection_msg", type="text",
-                value = 'Select a variable:',
-                placeholder="",readOnly = True,
-                style={'width': '49%','backgroundColor': '#f8f8f8', 'display': 'inline-block','border':'none','whiteSpace': 'pre-line',})
-        ]),
-        html.Div([
-            dcc.Dropdown(
-                id='V1_var_hist',
-                options=[{'label': i, 'value': i} for i in df1.columns],
-                value='experiment'
-            )
-        ], style={'width': '49%', 'display': 'inline-block'}),
-        
-        
-        html.Div([
-            dcc.Graph(id="V1_graph_histogram", style={'width': '40%', 'display': 'inline-block'})
-            
-        ]),
+app.layout = html.Div(style = {'background-color' : '#f8f8f8'}, children = [ 
 
+    html.Div(style = {'width' : '100%', 'height' : '10%', 'display' : 'block'}, children = [
+        dcc.Markdown('DArchR/gem5 logo here', style = {'text-align' : 'center'})
+    ]), 
+  # --------------------- Div View 1 ---------------------
+	html.Div(style = {'margin-bottom' : '5%'}, children = [ 
+        # ---------- Histograms
+		html.Div(style = {'width' : '10%', 'height': '100%', 'display' : 'inline-block'}, children = [  
+            html.Div([
+                dcc.Input(
+                    id="V1_variable_selection_msg", type="text",
+                    value = 'Select a variable:',
+                    placeholder="",readOnly = True,
+                    style={'width': '95%','backgroundColor': '#f8f8f8', 'display': 'block','border':'none'})
+            ]),
+            html.Div([
+                dcc.Dropdown(
+                    id='V1_var_hist',
+                    options=[{'label': i, 'value': i} for i in df1.columns],
+                    value='kernel'
+                )
+            ], style={'width': '95%', 'display': 'block'}),
+        ]),
+        dcc.Graph(id="V1_graph_histogram", style={'width': '40%', 'height' : '100%', 'display': 'inline-block'})
+    ]),
+
+    html.Div(style = {'margin-bottom' : '5%'}, children = [
         ##### Div Status Board
     
-        html.Div([
+        html.Div(style = {'width' : '10%', 'height': '100%', 'display' : 'inline-block'}, children = [
             dcc.Dropdown(
                 id="V1_Var1_Tile",
                 options=[{'label': i, 'value': i} for i in cat_cols],
@@ -125,12 +127,15 @@ app.layout = html.Div([
                     multi=True),
             ], style={'display': 'block'}),
 
-        ], style={'width': '25%','display': 'inline-block'}),
+        ]),
         
-        dcc.Graph(id='V1_Graph_Tile'),     
+        dcc.Graph(id='V1_Graph_Tile', style = {'width' : '80%', 'height': '100%', 'display' : 'inline-block'})
+    ]),
+
+    html.Div(style = {'margin-bottom' : '5%'}, children = [  
 
         # ---------- Div Bars
-        html.Div([
+        html.Div(style = {'width' : '10%', 'height': '100%', 'display' : 'inline-block'}, children = [
             dcc.Dropdown(
                 id="V1_Var1_Bars",
                 options=[{
@@ -178,13 +183,15 @@ app.layout = html.Div([
                     multi=True),
             ], style={'display': 'block'}),
 
-        ], style={'width': '25%','display': 'inline-block'}),
+        ]),
         
-        dcc.Graph(id='V1_graph_bar'),
-    
+        dcc.Graph(id='V1_graph_bar', style = {'width' : '80%', 'height': '100%', 'display' : 'inline-block'})
+    ]),
+
+    html.Div(style = {'margin-bottom' : '5%'}, children = [
         
         # ---------- Div Scatter
-        html.Div([
+        html.Div(style = {'width' : '10%', 'height': '100%', 'display' : 'inline-block'}, children = [
             dcc.Dropdown(
                 id="V1_Var1_Scat",
                 options=[{
@@ -241,27 +248,13 @@ app.layout = html.Div([
                     {'label': 'Y->Logarithmic', 'value': 'LogY'},
                 ],
                 value=['LogX']
-) 
+            ) 
 
-        ], style={'width': '25%','display': 'inline-block'}),
-        
-        dcc.Graph(id='V1_Graph_Scat'),
-
-        
+        ]),       
+        dcc.Graph(id='V1_Graph_Scat', style = {'width' : '80%', 'height': '100%', 'display' : 'inline-block'})
     
-    
-    ]),
-    
-    
-       
-
-   #####################################################################
-   # --------------------- Div View 2 ---------------------
-    
-  #####################################################################
-   # --------------------- Div View 3 ---------------------
-   
-],style={'backgroundColor': '#f8f8f8'},)
+    ])    
+])
 
 
 
