@@ -313,7 +313,7 @@ def update_V1_lvl1_opt(V1_Var1):
     [Input(component_id = 'V1_Var1_Bars',  component_property = 'value'),
      ])
 def update_V1_lvl1_val(V1_Var1):
-    return df1[V1_Var1].unique()
+    return df1[V1_Var1].unique()[0:2]
 
 
 ##----BAR VAR3 LEVELS ----------------------------------------------------------------------##
@@ -331,7 +331,7 @@ def update_V1_lvl3_opt(V1_Var3):
     [Input(component_id = 'V1_Var3_Bars',  component_property = 'value'),
      ])
 def update_V1_lvl3_val(V1_Var3):
-    return df1[V1_Var3].unique()
+    return df1[V1_Var3].unique()[0:2]
 
 
 ##----BAR VAR4 LEVELS ----------------------------------------------------------------------##
@@ -349,7 +349,7 @@ def update_V1_lvl4_opt(V1_Var4):
     [Input(component_id = 'V1_Var4_Bars',  component_property = 'value'),
      ])
 def update_V1_lvl4_val(V1_Var4):
-    return df1[V1_Var4].unique()
+    return df1[V1_Var4].unique()[0:2]
 
 
 
@@ -372,8 +372,8 @@ def update_graph_scatter(mVar1, mVar2, var3, lvls3, facet1, fac1Lvls):
    tmpdf = pd.DataFrame(df1, columns = [mVar1, mVar2, var3, facet1]) 
    tmpdf = tmpdf[tmpdf[var3].isin(lvls3)]
    tmpdf = tmpdf[tmpdf[facet1].isin(fac1Lvls)]
-   tmpdf = tmpdf.groupby(by = [var3, facet1],as_index=False).mean()
-   fig = px.scatter(tmpdf, x=mVar1, y=mVar2, color=var3, facet_col=facet1)    
+#    tmpdf = tmpdf.groupby(by = [var3, facet1],as_index=False).mean()
+   fig = px.scatter(tmpdf, x=mVar1, y=mVar2, color=var3, facet_col=facet1,log_x=True,log_y==True)    
    return fig
   
 
@@ -392,7 +392,7 @@ def update_V1_Var3Scat_lvls_opt(V1_Var3Scat):
     [Input(component_id = 'V1_Var3_Scat',     component_property = 'value'),
      ])
 def update_V1_Var3Scat_val(V1_Var3Scat):
-    return df1[V1_Var3Scat].unique()
+    return df1[V1_Var3Scat].unique()[0:2]
 
 
 ##----Scat VAR4 LEVELS ----------------------------------------------------------------------##
@@ -410,7 +410,7 @@ def update_Var4Scat_lvls_opt(V1_Var4Scat):
     [Input(component_id = 'V1_Var4_Scat',     component_property = 'value'),
      ])
 def update_Var4Scat_lvls_val(V1_Var4Scat):
-    return df1[V1_Var4Scat].unique()
+    return df1[V1_Var4Scat].unique()[0:2]
 
 #####################################################################################
 #####################################################################################
@@ -455,7 +455,7 @@ def update_V1Tile_lvl_opt(V1_Var1Tile):
    [Input(component_id = 'V1_Var1_Tile',     component_property = 'value'),
     ])
 def update_V1Tile_lvl_val(V1_Var1Tile):
-   return df1[V1_Var1Tile].unique()
+   return df1[V1_Var1Tile].unique()[0:2]
 
 ##----TILE VAR2 LEVELS ----------------------------------------------------------------------##
 @app.callback(
@@ -471,7 +471,7 @@ def update_V2Tile_lvl_opt(V1_Var2Tile):
    [Input(component_id = 'V1_Var2_Tile',     component_property = 'value'),
     ])
 def update_V2Tile_lvl_val(V1_Var2Tile):
-   return df1[V1_Var2Tile].unique()
+   return df1[V1_Var2Tile].unique()[0:2]
 
 
 
@@ -489,7 +489,7 @@ def update_V1Tile_lvl3_opt(V1_Var3Tile):
    [Input(component_id = 'V1_Var3_Tile',     component_property = 'value'),
     ])
 def update_V1Tile_lvl3_val(V1_Var3Tile):
-  return df1[V1_Var3Tile].unique()
+  return df1[V1_Var3Tile].unique()[0:2]
 #----TILE VAR4 LEVELS ----------------------------------------------------------------------##
 @app.callback(
    Output(component_id = 'V1_Var4Tile_lvls', component_property = 'options'),
@@ -504,7 +504,7 @@ def update_V1Tile_lvl4_opt(V1_Var4Tile):
    [Input(component_id = 'V1_Var4_Tile',     component_property = 'value'),
     ])
 def update_V1Tile_lvl4_val(V1_Var4Tile):
-   return df1[V1_Var4Tile].unique()
+   return df1[V1_Var4Tile].unique()[0:2]
 
 #----TILE VAR5 LEVELS ----------------------------------------------------------------------##
 @app.callback(
@@ -520,7 +520,7 @@ def update_V1Tile_lvl5_opt(V1_Var5Tile):
    [Input(component_id = 'V1_Var5_Tile',     component_property = 'value'),
     ])
 def update_V1Tile_lvl5_val(V1_Var5Tile):
-   return df1[V1_Var5Tile].unique()
+   return df1[V1_Var5Tile].unique()[0:2]
 
 
 
