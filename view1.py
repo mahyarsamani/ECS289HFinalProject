@@ -49,7 +49,7 @@ app.layout = html.Div(style = {'background-color' : '#f8f8f8'}, children = [
   # --------------------- Div View 1 ---------------------
 	html.Div(style = {'margin-bottom' : '5%'}, children = [ 
         # ---------- Histograms
-		html.Div(style = {'width' : '10%', 'height': '100%', 'display' : 'inline-block'}, children = [  
+		html.Div(style = {'width' : '30%', 'height': '100%', 'display' : 'inline-block'}, children = [  
             html.Div([
                 dcc.Input(
                     id="V1_variable_selection_msg", type="text",
@@ -71,7 +71,7 @@ app.layout = html.Div(style = {'background-color' : '#f8f8f8'}, children = [
     html.Div(style = {'margin-bottom' : '5%'}, children = [
         ##### Div Status Board
     
-        html.Div(style = {'width' : '10%', 'height': '100%', 'display' : 'inline-block'}, children = [
+        html.Div(style = {'width' : '30%', 'height': '100%', 'display' : 'inline-block'}, children = [
             dcc.Dropdown(
                 id="V1_Var1_Tile",
                 options=[{'label': i, 'value': i} for i in cat_cols],
@@ -129,13 +129,13 @@ app.layout = html.Div(style = {'background-color' : '#f8f8f8'}, children = [
 
         ]),
         
-        dcc.Graph(id='V1_Graph_Tile', style = {'width' : '80%', 'height': '100%', 'display' : 'inline-block'})
+        dcc.Graph(id='V1_Graph_Tile', style = {'width' : '65%', 'height': '100%', 'display' : 'inline-block'})
     ]),
 
     html.Div(style = {'margin-bottom' : '5%'}, children = [  
 
         # ---------- Div Bars
-        html.Div(style = {'width' : '10%', 'height': '100%', 'display' : 'inline-block'}, children = [
+        html.Div(style = {'width' : '30%', 'height': '100%', 'display' : 'inline-block'}, children = [
             dcc.Dropdown(
                 id="V1_Var1_Bars",
                 options=[{
@@ -185,13 +185,13 @@ app.layout = html.Div(style = {'background-color' : '#f8f8f8'}, children = [
 
         ]),
         
-        dcc.Graph(id='V1_graph_bar', style = {'width' : '80%', 'height': '100%', 'display' : 'inline-block'})
+        dcc.Graph(id='V1_graph_bar', style = {'width' : '65%', 'height': '100%', 'display' : 'inline-block'})
     ]),
 
     html.Div(style = {'margin-bottom' : '5%'}, children = [
         
         # ---------- Div Scatter
-        html.Div(style = {'width' : '10%', 'height': '100%', 'display' : 'inline-block'}, children = [
+        html.Div(style = {'width' : '30%', 'height': '100%', 'display' : 'inline-block'}, children = [
             dcc.Dropdown(
                 id="V1_Var1_Scat",
                 options=[{
@@ -251,7 +251,7 @@ app.layout = html.Div(style = {'background-color' : '#f8f8f8'}, children = [
             ) 
 
         ]),       
-        dcc.Graph(id='V1_Graph_Scat', style = {'width' : '80%', 'height': '100%', 'display' : 'inline-block'})
+        dcc.Graph(id='V1_Graph_Scat', style = {'width' : '65%', 'height': '100%', 'display' : 'inline-block'})
     
     ]),
     
@@ -259,7 +259,7 @@ app.layout = html.Div(style = {'background-color' : '#f8f8f8'}, children = [
 
     html.Div(style = {'margin-bottom' : '5%'}, children = [
 		# ---------- Div General settings
-		html.Div(style = {'width' : '20%', 'height': '100%', 'display' : 'inline-block'}, children = [
+		html.Div(style = {'width' : '30%', 'height': '100%', 'display' : 'inline-block'}, children = [
             
             # html.Div([
             # dcc.Textarea(id="V3_Divider",
@@ -382,7 +382,7 @@ app.layout = html.Div(style = {'background-color' : '#f8f8f8'}, children = [
                 dcc.Graph(
                     id='V3_conftable_fig'
                 )
-            ], style={'width': '75%', 'display': 'inline-block', 'padding': '0 20'}),
+            ], style={'width': '65%', 'display': 'inline-block', 'padding': '0 20'}),
 		# ---------- Div Axis choice
 	]) 
 ])
