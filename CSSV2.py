@@ -1,4 +1,4 @@
-############### IMPORTED LIBARIES AND PACKAGES ###############
+######################### IMPORTED LIBARIES AND PACKAGES #################################
 
 import dash
 import dash_core_components as dcc
@@ -16,6 +16,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import accuracy_score
 
+############################### STYLE VARS ##############################################
 
 colors = {
     'background': '#A9A9A9',
@@ -27,31 +28,34 @@ statColor = {
     ''
 }
 
-############### LOADING DATASET AND DATASET PRE-PROCESSING ###############
+###################### LOADING DATASET AND DATASET PRE-PROCESSING ######################
 
-df1 = pd.read_csv('datasetNew.csv', encoding='ISO-8859-1')
+df1 = pd.read_csv('datasetNew_v2.csv', encoding='ISO-8859-1')
 df1 = df1.fillna(df1.mean())
+
 ############## EXTRACTING DESIRED VARIABLES FOR THE REST OF THE PROGRAM ################
 
 df1['Num. of CPUs'] = df1['Num. of CPUs'].astype(object)
 df1cols = df1.columns
 num_cols = df1.select_dtypes(include=[np.number]).columns
 cat_cols = df1.select_dtypes(exclude=[np.number]).columns
-
 desc_cols = ['Experiment Name', 'Kernel Version', 'CPU Model', 'Num. of CPUs', 'Memory System', 'Boot Type', 'Workload', 'Input Size']
 
-
-############## VISUALIZATION AND INTERACTION AND DATA ANALYSIS ##############
+################## VISUALIZATION AND INTERACTION AND DATA ANALYSIS ####################
 
 app = dash.Dash()
 app.layout = html.Div(style = {'background-color' : '#f8f8f8'}, children = [ 
 
     html.Div(style = {'width' : '100%', 'height' : '10%', 'display' : 'block'}, children = [
         dcc.Markdown('DArchR/gem5 logo here', style = {'text-align' : 'center'})
-    ]), 
-  # --------------------- Div View 1 ---------------------
+    ]),
+
+    # ------------------------------------------------------
+    # --------------------- Div View 1 ---------------------
+    # ------------------------------------------------------ 
+    
+    # ---------- Histogram
 	html.Div(style = {'margin-bottom' : '5%'}, children = [ 
-        # ---------- Histograms
 		html.Div(style = {'width' : '30%', 'height': '100%', 'display' : 'inline-block'}, children = [  
             html.Div([
                 dcc.Input(
@@ -71,9 +75,8 @@ app.layout = html.Div(style = {'background-color' : '#f8f8f8'}, children = [
         dcc.Graph(id="V1_graph_histogram", style={'width': '40%', 'height' : '100%', 'display': 'inline-block'})
     ]),
 
-    html.Div(style = {'margin-bottom' : '5%'}, children = [
-        
-        ##### Div Tree Map    
+    # ---------- Tree Map
+    html.Div(style = {'margin-bottom' : '5%'}, children = [    
         html.Div(style = {'width' : '30%', 'height': '100%', 'display' : 'inline-block'}, children = [
             dcc.Dropdown(
                 id="V1_Var1_Tile",
@@ -99,7 +102,7 @@ app.layout = html.Div(style = {'background-color' : '#f8f8f8'}, children = [
 
             dcc.Dropdown(
                 id="V1_Var3_Tile",
-                options=[{'label': i, 'value': i } for i in cat_cols],
+                options=[{'label': i, 'value': i} for i in cat_cols],
                 value= 'Num. of CPUs'),
             html.Div([
                 dcc.Dropdown(
@@ -121,7 +124,7 @@ app.layout = html.Div(style = {'background-color' : '#f8f8f8'}, children = [
 
             dcc.Dropdown(
                 id="V1_Var5_Tile",
-                options=[{'label': i,  'value': i } for i in cat_cols],
+                options=[{'label': i, 'value': i} for i in cat_cols],
                 value= 'CPU Model'),
 
             html.Div([
@@ -130,12 +133,9 @@ app.layout = html.Div(style = {'background-color' : '#f8f8f8'}, children = [
                     multi=True),
             ], style={'display': 'block'}),
 
-
-
-
             dcc.Dropdown(
                 id="V1_Var6_Tile",
-                options=[{'label': i,  'value': i } for i in cat_cols],
+                options=[{'label': i, 'value': i} for i in cat_cols],
                 value= 'Memory System'),
 
             html.Div([
@@ -147,7 +147,7 @@ app.layout = html.Div(style = {'background-color' : '#f8f8f8'}, children = [
 
             dcc.Dropdown(
                 id="V1_Var7_Tile",
-                options=[{'label': i,  'value': i } for i in cat_cols],
+                options=[{'label': i, 'value': i} for i in cat_cols],
                 value= 'Input Size'),
 
             html.Div([
@@ -156,10 +156,9 @@ app.layout = html.Div(style = {'background-color' : '#f8f8f8'}, children = [
                     multi=True),
             ], style={'display': 'block'}),
 
-
             dcc.Dropdown(
                 id="V1_Var8_Tile",
-                options=[{'label': i,  'value': i } for i in cat_cols],
+                options=[{'label': i,  'value': i} for i in cat_cols],
                 value= 'Sim. Status Result'),
 
             html.Div([
@@ -173,16 +172,18 @@ app.layout = html.Div(style = {'background-color' : '#f8f8f8'}, children = [
         dcc.Graph(id='V1_Graph_Tile', style = {'width' : '65%', 'height': '100%', 'display' : 'inline-block'})
     ]),
 
+    
+    # ------------------------------------------------------
+    # --------------------- Div View 2 ---------------------
+    # ------------------------------------------------------
+
+    # ---------- Bar Charts
     html.Div(style = {'margin-bottom' : '5%'}, children = [  
 
-        # ---------- Div Bars
         html.Div(style = {'width' : '30%', 'height': '100%', 'display' : 'inline-block'}, children = [
             dcc.Dropdown(
                 id="V1_Var1_Bars",
-                options=[{
-                    'label': i,
-                    'value': i
-                } for i in cat_cols],
+                options=[{'label': i, 'value': i} for i in cat_cols],
                 value= 'CPU Model'),
             
             html.Div([
@@ -193,18 +194,12 @@ app.layout = html.Div(style = {'background-color' : '#f8f8f8'}, children = [
 
             dcc.Dropdown(
                 id="V1_Var2_Bars",
-                options=[{
-                    'label': i,
-                    'value': i
-                } for i in num_cols],
+                options=[{'label': i, 'value': i} for i in num_cols],
                 value= 'Host Time'),
 
             dcc.Dropdown(
                 id="V1_Var3_Bars",
-                options=[{
-                    'label': i,
-                    'value': i
-                } for i in cat_cols],
+                options=[{'label': i, 'value': i} for i in cat_cols],
                 value= 'Sim. Status Result'),
             html.Div([
                 dcc.Dropdown(
@@ -229,33 +224,25 @@ app.layout = html.Div(style = {'background-color' : '#f8f8f8'}, children = [
         dcc.Graph(id='V1_graph_bar', style = {'width' : '65%', 'height': '100%', 'display' : 'inline-block'})
     ]),
 
+    # ---------- Scatter
     html.Div(style = {'margin-bottom' : '5%'}, children = [
         
-        # ---------- Div Scatter
         html.Div(style = {'width' : '30%', 'height': '100%', 'display' : 'inline-block'}, children = [
             dcc.Dropdown(
                 id="V1_Var1_Scat",
-                options=[{
-                    'label': i,
-                    'value': i
-                } for i in num_cols],
+                options=[{'label': i, 'value': i} for i in num_cols],
                 value= 'Host Time'),
             
             dcc.Dropdown(
                 id="V1_Var2_Scat",
-                options=[{
-                    'label': i,
-                    'value': i
-                } for i in num_cols],
+                options=[{'label': i, 'value': i} for i in num_cols],
                 value= 'Host Instruction Rate'),
 
             dcc.Dropdown(
                 id="V1_Var3_Scat",
-                options=[{
-                    'label': i,
-                    'value': i
-                } for i in cat_cols],
+                options=[{'label': i, 'value': i} for i in cat_cols],
                 value= 'Experiment Name'),
+
             html.Div([
                 dcc.Dropdown(
                     id="V1_Var3Scat_lvls",
@@ -276,10 +263,7 @@ app.layout = html.Div(style = {'background-color' : '#f8f8f8'}, children = [
 
             dcc.Dropdown(
                 id="V5_Var5_Scat",
-                options=[{
-                    'label': i,
-                    'value': i
-                } for i in num_cols],
+                options=[{'label': i, 'value': i} for i in num_cols],
                 value= 'Host Opcode Rate'),
 
             dcc.Checklist(
@@ -296,8 +280,12 @@ app.layout = html.Div(style = {'background-color' : '#f8f8f8'}, children = [
     
     ]),
     
-    # Here
+    # ------------------------------------------------------
+    # --------------------- Div View 3 ---------------------
+    # ------------------------------------------------------
 
+
+    # -------- PCA
     html.Div(style = {'margin-bottom' : '5%'}, children = [
 		# ---------- Div General settings
 		html.Div(style = {'width' : '30%', 'height': '100%', 'display' : 'inline-block'}, children = [
@@ -399,15 +387,6 @@ app.layout = html.Div(style = {'background-color' : '#f8f8f8'}, children = [
                     marks={str(i): str(i) for i in range(10,50)}
                 ), style={'width': '99%', 'float': 'right', 'padding': '0px 20px 20px 20px','whiteSpace': 'pre-line'}
             ),
-            
-            
-            # html.Div(
-            #     dcc.Input(
-            #         id='V3_accu', type='text', 
-            #         value = ['Confusion Table:'],
-            #         placeholder="",readOnly = True,
-            #         style={'width': '99%','backgroundColor': '#f8f8f8', 'float': 'left', 'display': 'block','border':'none','whiteSpace': 'pre-line','height': 30})
-            #     )
 			
 		]),
 
@@ -419,6 +398,8 @@ app.layout = html.Div(style = {'background-color' : '#f8f8f8'}, children = [
             ], style={'width': '65%', 'display': 'inline-block', 'padding': '0 20'}),
 		# ---------- Div Axis choice
 	]) ,
+
+##********************************************************************************************************************
 
     # ---------- num estimate
     html.Div(style = {'margin-bottom' : '5%'}, children = [
@@ -464,7 +445,7 @@ app.layout = html.Div(style = {'background-color' : '#f8f8f8'}, children = [
             ]),          		
 		]),
 
-        # ---------- graph hist
+        # ---------- graphs hist
         html.Div([
                 dcc.Textarea(
                     id="V4_estimate",
@@ -479,15 +460,21 @@ app.layout = html.Div(style = {'background-color' : '#f8f8f8'}, children = [
                     id='V4_hist_fig'
                 )
             ], style={'width': '75%', 'display': 'inline-block', 'padding': '0 20'}),
+        
+        html.Div([
+                dcc.Graph(
+                    id='V4_hist_fig2'
+                )
+            ], style={'width': '75%', 'display': 'inline-block', 'padding': '0 20'}),
 
 	]),
 ])
 
 
 
-
-########################################### View 1 Callbacks ###########################################
-
+###################################################################################################################
+############################################### *** STATIC *** ####################################################
+###################################################################################################################
 
 ##----HISTOGRAM FIGURE ----------------------------------------------------------------------##
 @app.callback(
@@ -513,6 +500,9 @@ def update_graph_hist(ColName):
         )
     }
 
+###################################################################################################################
+############################################# *** DYNAMIC *** #####################################################
+###################################################################################################################
 
 ##----BAR FIGURE ----------------------------------------------------------------------##
 @app.callback(
@@ -702,7 +692,6 @@ def update_graph_tile(var1, lvl1, var2, lvl2, var3, lvl3, var4, lvl4, var5, lvl5
     #tmpdf = df1.groupby(by = [var1, var2, var3, var4, var5],as_index=False).mean()
     fig = px.treemap(tmpdf, path=[var1, var2, var3, var4, var5, var6, var7, var8], values='Simulation Frequency')
     return fig
- 
 
 ##----TREE VAR1 LEVELS ----------------------------------------------------------------------##
 @app.callback(
@@ -736,8 +725,6 @@ def update_V2Tile_lvl_opt(V1_Var2Tile):
 def update_V2Tile_lvl_val(V1_Var2Tile):
    return df1[V1_Var2Tile].unique()[0:2]
 
-
-
 ##----TREE VAR3 LEVELS ----------------------------------------------------------------------##
 @app.callback(
    Output(component_id = 'V1_Var3Tile_lvls', component_property = 'options'),
@@ -753,6 +740,7 @@ def update_V1Tile_lvl3_opt(V1_Var3Tile):
     ])
 def update_V1Tile_lvl3_val(V1_Var3Tile):
   return df1[V1_Var3Tile].unique()[0:2]
+
 #----TREE VAR4 LEVELS ----------------------------------------------------------------------##
 @app.callback(
    Output(component_id = 'V1_Var4Tile_lvls', component_property = 'options'),
@@ -784,9 +772,6 @@ def update_V1Tile_lvl5_opt(V1_Var5Tile):
     ])
 def update_V1Tile_lvl5_val(V1_Var5Tile):
    return df1[V1_Var5Tile].unique()[0:2]
-
-
-
 
 #----TREE VAR6 LEVELS ----------------------------------------------------------------------##
 @app.callback(
@@ -838,7 +823,7 @@ def update_V1Tile_lvl8_val(V1_Var8Tile):
    return df1[V1_Var8Tile].unique()[0:2]
 
 ###################################################################################################################
-###################################################################################################################
+############################################ *** DATA ANALYSIS *** ################################################
 ###################################################################################################################
 
 @app.callback(
@@ -852,21 +837,14 @@ def update_V1Tile_lvl8_val(V1_Var8Tile):
       ])
 def update_graph(grname, contfeat, preprocflag, Component_num, testproport):
     
-    #----------------------- Select groups and year ranges
     Catlabel = grname
     ML_Cols = np.concatenate([[grname],contfeat])
-
-    grname = df1[Catlabel].unique() 
-    # df_ML = df1[(df1['iyear']>year_range[0]) & (df1['iyear']<year_range[1])]
-    # df_ML = df_ML[df_ML['gname'].isin(grname)]
+    grname = df1[Catlabel].unique()
     df_ML = df1[ML_Cols]
     df_ML = df_ML.fillna(df_ML.mean())
-
     df_Cont = pd.DataFrame(df_ML, columns = contfeat)
-    
     labels = df_ML[Catlabel]
-    
-    
+
     if 'norm_flag' in preprocflag:
      	# ------------ Normalize
      	sc = StandardScaler()
@@ -876,18 +854,12 @@ def update_graph(grname, contfeat, preprocflag, Component_num, testproport):
      	# ------------ PCA
      	pca = PCA(n_components = Component_num)
      	df_Cont = pca.fit_transform(df_Cont)
-     	explained_variance = pca.explained_variance_ratio_
-
     
     feats = df_Cont
-    
-
     X_train, X_test, y_train, y_test = train_test_split(feats, labels, test_size=testproport/100, random_state=0)
 
     datapoints = df_ML.groupby([Catlabel]).size().reset_index(name="idx N")
     datapoints = pd.DataFrame(datapoints, columns = ['idx N',Catlabel])
-
-    
     datapoints_str = ['Number of datapoints: \n'
                    + str(datapoints)]
     
@@ -902,22 +874,11 @@ def update_graph(grname, contfeat, preprocflag, Component_num, testproport):
 
     import plotly.figure_factory as ff
 
-    # print(cm)
-    # print(grname[len(grname)::-1])
     fig = ff.create_annotated_heatmap(cm, 
                                       font_colors=['black'], hoverinfo='text',
                                       colorscale='Viridis')
-    # fig = ff.create_annotated_heatmap(cm[len(grname)::-1].T, 
-    #                                   x = grname,
-    #                                   y = grname[len(grname)::-1],
-    #                                   font_colors=['black'], hoverinfo='text',
-    #                                   colorscale='Viridis')
     fig.update_layout(title_text= 'Accuracy = '+ str(accuracy_score(y_test, y_pred)))
-    
-    
-    return (datapoints_str
-            , fig
-    )
+    return (datapoints_str, fig)
 
 
 #####################################################################################
@@ -925,13 +886,14 @@ def update_graph(grname, contfeat, preprocflag, Component_num, testproport):
 
 ##----mVar Estimate ----------------------------------------------------------------------##
 @app.callback(
-   dash.dependencies.Output(component_id = 'V4_estimate', component_property = 'value'),
-   dash.dependencies.Output(component_id = 'V4_hist_fig', component_property = 'figure'),
-   [dash.dependencies.Input(component_id = 'V4_mVar',     component_property = 'value'),
-    dash.dependencies.Input(component_id = 'V4_feat',     component_property = 'value'),
-    dash.dependencies.Input(component_id = 'V4_bin',      component_property = 'value'),
+   dash.dependencies.Output(component_id = 'V4_estimate',  component_property = 'value'),
+   dash.dependencies.Output(component_id = 'V4_hist_fig',  component_property = 'figure'),
+   dash.dependencies.Output(component_id = 'V4_hist_fig2', component_property = 'figure'),
+   [dash.dependencies.Input(component_id = 'V4_mVar',      component_property = 'value'),
+    dash.dependencies.Input(component_id = 'V4_feat',      component_property = 'value'),
+    dash.dependencies.Input(component_id = 'V4_bin',       component_property = 'value'),
      ])
-def update_graph(mVar, feat, bin):
+def update_histGraphs(mVar, feat, bin):
     datapoints_str = "testing"
     sortdf = df1.sort_values(by = [mVar])
     tmpdf = pd.DataFrame(sortdf, columns = [mVar])
@@ -941,9 +903,7 @@ def update_graph(mVar, feat, bin):
     for col in feat:
         featdf[col] = featdf[col].astype('category')
         featdf[col] = featdf[col].cat.codes
-    
-    # print("====================================================================Here")
-    # print(featdf)
+
     groups = np.array_split(tmpdf[mVar],bin)
     labels = []
     tmpdf["Labels"] = tmpdf[mVar]
@@ -952,50 +912,21 @@ def update_graph(mVar, feat, bin):
         tmpdf.loc[tmpdf[mVar].ge(np.min(groups[i])) & tmpdf[mVar].le(np.max(groups[i])),"Labels"]= "{:.1e}".format(np.min(groups[i]))+"_"+"{:.1e}".format(np.max(groups[i]))
         labels = np.append(labels,"{:.1e}".format(np.min(groups[i]))+"_"+"{:.1e}".format(np.max(groups[i])))
 
-    print("====================================================================Here")
-    print(groups)
-
-
-
     fig = px.histogram(tmpdf,x = "Labels", labels = {'x':mVar, 'y':"frequency"})
-    # print("====================================================================Here")
-    # print(labels)
-    # print(groups)
-
-    # hist, binedge = np.histogram(tmpdf[mVar], bins=bin)
-    # binedge[-1] = binedge[-1]+1
-    # tmpdf["Labels"] = tmpdf[mVar]
-    # labels = []
-    # # for i in range(len(binedge)-1):
-    # #     tmpdf["Labels"][tmpdf[mVar].ge(binedge[i]) & tmpdf[mVar].lt(binedge[i+1])]= str(binedge[i])+"_"+str(binedge[i+1])
-    # #     labels = np.append(labels,str(binedge[i])+"_"+str(binedge[i+1]))
-    # for i in range(len(binedge)-1):
-    #     tmpdf["Labels"][tmpdf[mVar].ge(binedge[i]) & tmpdf[mVar].lt(binedge[i+1])]= "{:.1e}".format(binedge[i])+"_"+"{:.1e}".format(binedge[i+1])
-    #     labels = np.append(labels,"{:.1e}".format(binedge[i])+"_"+"{:.1e}".format(binedge[i+1]))
-
-    
-    # fig = px.bar(x=labels , y = hist, labels = {'x':mVar, 'y':"frequency"})
-
     featdf = featdf.fillna(featdf.mean())
     # sc = StandardScaler()
     # featdf = sc.fit_transform(featdf)
-
     labels = tmpdf["Labels"]
     y_train = labels
     X_train = featdf
-
-        
     # ------------ Random Forest classifier 
     classifier = RandomForestClassifier(max_depth=2, random_state=0)
     classifier.fit(X_train, y_train)
-
     y_pred = classifier.predict(X_train)
-    
+    fig2 = px.histogram(y_pred)
     # cm = confusion_matrix(y_train, y_pred)
-
     datapoints_str = 'Accuracy = '+ str(accuracy_score(y_train, y_pred))
-
-    return (datapoints_str,fig)
+    return (datapoints_str,fig, fig2)
 
 
 
