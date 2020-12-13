@@ -15,6 +15,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import accuracy_score
+import base64
 
 ############################### STYLE VARS ##############################################
 
@@ -47,33 +48,55 @@ app = dash.Dash()
 app.layout = html.Div(style = {'background-color' : '#f8f8f8'}, children = [ 
 
     html.Div(style = {'width' : '100%', 'height' : '10%', 'display' : 'block'}, children = [
-        dcc.Markdown('DArchR/gem5 logo here', style = {'text-align' : 'center'})
+        dcc.Markdown('DArchR/gem5 logo here', style = {'text-align' : 'center'}),
     ]),
 
     # ------------------------------------------------------
     # --------------------- Div View 1 ---------------------
     # ------------------------------------------------------ 
     
-    # ---------- Histogram
+    # ---------- Pie Chart of Categorical
+    html.Div(style = {'margin-bottom' : '5%'}, children = [ 
+		html.Div(style = {'width' : '30%', 'height': '100%', 'display' : 'inline-block'}, children = [  
+            html.Div([
+                dcc.Input(
+                    id="V1_cVar_selection_msg", type="text",
+                    value = 'Select a categorical variable to see the pie chart of its values:',
+                    placeholder="",readOnly = True,
+                    style={'width': '90%','backgroundColor': '#f8f8f8',  'border':'none', 'display': 'inline-block'})
+            ]),
+            html.Div([
+                dcc.Dropdown(
+                    id='V1_var_piechart',
+                    options=[{'label': i, 'value': i} for i in cat_cols],
+                    value='Kernel Version'
+                )
+            ], style={'width': '90%', 'display': 'inline-block'}),
+        ]),
+        dcc.Graph(id="V1_pie_chart", style={'width': '40%', 'height' : '100%', 'display': 'inline-block'}),
+    ]),
+
+    # ---------- Histogram of Measured
 	html.Div(style = {'margin-bottom' : '5%'}, children = [ 
 		html.Div(style = {'width' : '30%', 'height': '100%', 'display' : 'inline-block'}, children = [  
             html.Div([
                 dcc.Input(
-                    id="V1_variable_selection_msg", type="text",
-                    value = 'Select a variable:',
+                    id="V1_mVar_selection_msg", type="text",
+                    value = 'Select a measured variable to see the histogram of its distribution:',
                     placeholder="",readOnly = True,
-                    style={'width': '95%','backgroundColor': '#f8f8f8', 'display': 'block','border':'none'})
+                    style={'width': '90%','backgroundColor': '#f8f8f8', 'border':'none', 'display': 'inline-block'})
             ]),
             html.Div([
                 dcc.Dropdown(
                     id='V1_var_hist',
-                    options=[{'label': i, 'value': i} for i in df1.columns],
-                    value='Kernel Version'
+                    options=[{'label': i, 'value': i} for i in num_cols],
+                    value='Host Memory Usage'
                 )
-            ], style={'width': '95%', 'display': 'block'}),
+            ], style={'width': '90%', 'display': 'inline-block'}),
         ]),
-        dcc.Graph(id="V1_graph_histogram", style={'width': '40%', 'height' : '100%', 'display': 'inline-block'})
+        dcc.Graph(id="V1_graph_histogram", style={'width': '40%', 'height' : '100%', 'display': 'inline-block' }),
     ]),
+
 
     # ---------- Tree Map
     html.Div(style = {'margin-bottom' : '5%'}, children = [    
@@ -500,6 +523,16 @@ def update_graph_hist(ColName):
         )
     }
 
+@app.callback(
+    Output(component_id = 'V1_pie_chart',    component_property = 'figure'),
+    [Input(component_id = 'V1_var_piechart', component_property = 'value')])
+def update_graph_pie(ColName):
+    dftmp = pd.DataFrame(df1, columns = [ColName]) 
+    dftmp = dftmp[dftmp[ColName] != "NAN"]
+    dftmp = dftmp.groupby([ColName]).size().reset_index(name="count")
+    fig = px.pie(dftmp, names = ColName, values = 'count') 
+    return fig
+        
 ###################################################################################################################
 ############################################# *** DYNAMIC *** #####################################################
 ###################################################################################################################
