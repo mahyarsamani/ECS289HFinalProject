@@ -78,8 +78,7 @@ app.layout = html.Div(style = {'padding-right' : '5%', 'padding-left' : '5%'}, c
             dcc.Dropdown(
                 id='V1_var_hist',
                 options=[{'label': i, 'value': i} for i in num_cols],
-                value='Host Memory Usage'
-            )
+                value='Host Memory Usage')
         ]),
         dcc.Graph(id="V1_pie_chart", style={'width': '40%', 'height' : '100%', 'display': 'inline-block'}),
         dcc.Graph(id="V1_graph_histogram", style={'width': '40%', 'height' : '100%', 'display': 'inline-block' })
@@ -118,8 +117,8 @@ app.layout = html.Div(style = {'padding-right' : '5%', 'padding-left' : '5%'}, c
                 
                 dcc.Dropdown(   
                     id="V1_Var1Tile_lvls",
-                    multi=True,
-                    style = {'display' : 'inline-block'})
+                    multi=True)
+                    # style = {'display' : 'inline-block'})
             ]),
             html.Div([
                 dcc.Dropdown(
@@ -209,76 +208,178 @@ app.layout = html.Div(style = {'padding-right' : '5%', 'padding-left' : '5%'}, c
     # ------------------------------------------------------
 
     # ---------- Bar Charts
-    html.Div(style = {'margin-bottom' : '5%', 'display' : 'flex', 'align-items' : 'center'}, children = [  
+    html.Div(style = {'margin-bottom' : '5%'}, children = [  
+        html.Div(style = {'width': '100%', 'display' : 'flex'}, children = [
+            html.Div([
+                dcc.Textarea(
+                    id="bartxt1",
+                    value = ['Select X-Axis below:'],
+                    readOnly = True),
 
-        html.Div(style = {'width' : '15%', 'height': '100%', 'display' : 'inline-block'}, children = [
-            dcc.Dropdown(
-                id="V1_Var1_Bars",
-                options=[{'label': i, 'value': i} for i in cat_cols],
-                value= 'CPU Model'),
+                dcc.Dropdown(
+                    id="V1_Var1_Bars",
+                    options=[{'label': i, 'value': i} for i in cat_cols],
+                    value= 'CPU Model')
+            ]),
 
-            dcc.Dropdown(
-                id="V1_Var1_lvls",
-                multi=True),
+            html.Div([
+                dcc.Textarea(
+                    id="bartxt2",
+                    value = ['Select X-Axis levels below:'],
+                    readOnly = True),
+
+                dcc.Dropdown(
+                    id="V1_Var1_lvls",
+                    multi=True)
+            ]),
+
+            html.Div([
+                dcc.Textarea(
+                    id="bartxt3",
+                    value = ['Select Y-Axis below:'],
+                    readOnly = True),
+        
+                dcc.Dropdown(
+                    id="V1_Var2_Bars",
+                    options=[{'label': i, 'value': i} for i in num_cols],
+                    value= 'Host Time')
+            ]),
+
+            html.Div([
+                dcc.Textarea(
+                    id="bartxt5",
+                    value = ['Select colored group variable below:'],
+                    readOnly = True),
+
+                dcc.Dropdown(
+                    id="V1_Var3_Bars",
+                    options=[{'label': i, 'value': i} for i in cat_cols],
+                    value= 'Memory System')
+            ]), 
+
+            html.Div([
+                dcc.Textarea(
+                    id="bartxt6",
+                    value = ['Select colored group variable levels below:'],
+                    readOnly = True),
+
+                dcc.Dropdown(
+                    id="V1_Var3_lvls",
+                    multi=True)
+            ]),
+
+            html.Div([
+                dcc.Textarea(
+                    id="bartxt7",
+                    value = ['Select facet variable below:'],
+                    readOnly = True),
+
+                dcc.Dropdown(
+                    id="V1_Var4_Bars",
+                    options=[{'label': i, 'value': i} for i in cat_cols],
+                    value= 'Kernel Version')
+            ]),
+
+            html.Div([
+                dcc.Textarea(
+                    id="bartxt8",
+                    value = ['Select facet variable levels below:'],
+                    readOnly = True),
+
+                dcc.Dropdown(
+                    id="V1_Var4_lvls",
+                    multi=True)
+            ]),
+                 
+        ]),
+
+        dcc.Graph(id='V1_graph_bar', style = {'width' : '100%', 'display' : 'inline-block'})
+    ]),
     
-            dcc.Dropdown(
-                id="V1_Var2_Bars",
-                options=[{'label': i, 'value': i} for i in num_cols],
-                value= 'Host Time'),
+    html.Div(style = {'margin-bottom' : '5%'}, children = [     
+        html.Div(style = {'width' : '100', 'display' : 'flex'}, children = [
+            html.Div([
+                dcc.Textarea(
+                    id="scattxt1",
+                    value = ['Select X-Axis below:'],
+                    readOnly = True),
 
-            dcc.Dropdown(
-                id="V1_Var3_Bars",
-                options=[{'label': i, 'value': i} for i in cat_cols],
-                value= 'Sim. Status Result'),
+                dcc.Dropdown(
+                    id="V1_Var1_Scat",
+                    options=[{'label': i, 'value': i} for i in num_cols],
+                    value= 'Number of Memory References')
+            ]),
 
-            dcc.Dropdown(
-                id="V1_Var3_lvls",
-                multi=True),
+            html.Div([
+                dcc.Textarea(
+                    id="scattxt2",
+                    value = ['Select Y-Axis below:'],
+                    readOnly = True),
+                
+                dcc.Dropdown(
+                    id="V1_Var2_Scat",
+                    options=[{'label': i, 'value': i} for i in num_cols],
+                    value= 'Host Instruction Rate')
+            ]),
 
+            html.Div([
+                dcc.Textarea(
+                    id="scattxt3",
+                    value = ['Select color variable below:'],
+                    readOnly = True),
 
-            dcc.Dropdown(
-                id="V1_Var4_Bars",
-                options=[{'label': i, 'value': i} for i in cat_cols],
-                value= 'Kernel Version',
-            ),
+                dcc.Dropdown(
+                    id="V1_Var3_Scat",
+                    options=[{'label': i, 'value': i} for i in cat_cols],
+                    value= 'Memory System')
 
-            dcc.Dropdown(
-                id="V1_Var4_lvls",
-                multi=True),
+            ]),
 
-            dcc.Dropdown(
-                id="V1_Var1_Scat",
-                options=[{'label': i, 'value': i} for i in num_cols],
-                value= 'Host Time'),
-            
-            dcc.Dropdown(
-                id="V1_Var2_Scat",
-                options=[{'label': i, 'value': i} for i in num_cols],
-                value= 'Host Instruction Rate'),
+            html.Div([
+                dcc.Textarea(
+                    id="scattxt4",
+                    value = ['Select color variable levels below:'],
+                    readOnly = True),
 
-            dcc.Dropdown(
-                id="V1_Var3_Scat",
-                options=[{'label': i, 'value': i} for i in cat_cols],
-                value= 'Experiment Name'),
-
-            dcc.Dropdown(
+                dcc.Dropdown(
                 id="V1_Var3Scat_lvls",
-                multi=True),
+                multi=True)
+            
+            ]), 
 
-            dcc.Dropdown(
-                id="V1_Var4_Scat",
-                options=[{'label': i, 'value': i} for i in cat_cols],
-                value= 'Sim. Status Result',
-            ),
+            html.Div([
+                dcc.Textarea(
+                    id="scattxt5",
+                    value = ['Select facet variable below:'],
+                    readOnly = True),
 
-            dcc.Dropdown(
-                id="V1_Var4Scat_lvls",
-                multi=True),
+                dcc.Dropdown(
+                    id="V1_Var4_Scat",
+                    options=[{'label': i, 'value': i} for i in cat_cols],
+                    value= 'Kernel Version')
+            ]),
 
-            dcc.Dropdown(
-                id="V5_Var5_Scat",
-                options=[{'label': i, 'value': i} for i in num_cols],
-                value= 'Host Opcode Rate'),
+            html.Div([
+                dcc.Textarea(
+                    id="scattxt6",
+                    value = ['Select facet variable levels below:'],
+                    readOnly = True),
+
+                dcc.Dropdown(
+                    id="V1_Var4Scat_lvls",
+                    multi=True)
+            ]),
+
+            html.Div([
+                dcc.Textarea(
+                    id="scattxt7",
+                    value = ['Select scatter dots size variable below:'],
+                    readOnly = True),
+                dcc.Dropdown(
+                    id="V5_Var5_Scat",
+                    options=[{'label': i, 'value': i} for i in num_cols],
+                    value= 'Number of Load Instructions')
+            ]), 
 
             dcc.Checklist(
                 id = 'V1_Logarithmic_Scat',
@@ -286,12 +387,10 @@ app.layout = html.Div(style = {'padding-right' : '5%', 'padding-left' : '5%'}, c
                     {'label': 'X->Logarithmic', 'value': 'LogX'},
                     {'label': 'Y->Logarithmic', 'value': 'LogY'},
                 ],
-                value=['LogX']
-            )
+                value=['LogX'])
         ]),
         
-        dcc.Graph(id='V1_graph_bar', style = {'width' : '40%', 'height': '100%', 'display' : 'inline-block'}),
-        dcc.Graph(id='V1_Graph_Scat', style = {'width' : '40%', 'height': '100%', 'display' : 'inline-block'})
+        dcc.Graph(id='V1_Graph_Scat', style = {'width' : '100%', 'display' : 'inline-block'}) 
     ]),
 
     # ---------- Scatter
@@ -360,17 +459,17 @@ app.layout = html.Div(style = {'padding-right' : '5%', 'padding-left' : '5%'}, c
 		# ---------- Div General settings
 		html.Div(style = {'width' : '40%', 'height': '100%', 'display' : 'inline-block', 'margin-right' : '5%'}, children = [
             dcc.Textarea(id="V3_txt1",
-                value = ['Select Desired Group(s):'],
+                value = ['Select Desired Descriptive Variable:'],
                 readOnly = True,
                 style={'width': '100%','backgroundColor': '#f8f8f8', 'justify': 'center', 'display': 'flex','resize': 'none','border':'none'}),
             
             dcc.Dropdown(
-                id='V3_groupname',
+                id='V3_desc',
                 options=[{'label': i, 'value': i} for i in cat_cols],
-                value=cat_cols[0]),
+                value='Kernel Version'),
 
             dcc.Textarea(id="V3_txt2",
-                value = ['Select Desired Numerical Feature(s):'],
+                value = ['Select Desired Measurement Feature(s):'],
                 readOnly = True,
                 style={'width': '100%','backgroundColor': '#f8f8f8', 'justify': 'center', 'display': 'flex','resize': 'none','border':'none'}),
 
@@ -403,7 +502,7 @@ app.layout = html.Div(style = {'padding-right' : '5%', 'padding-left' : '5%'}, c
                 style={'width': '100%','backgroundColor': '#f8f8f8', 'float': 'left', 'display': 'block','border':'none','whiteSpace': 'pre-line','height': 30}),
 
             dcc.Input(
-                id="V3_pcaCompNum_txt", type="number", placeholder="", value=5,
+                id="V3_pcaCompNum_txt", type="number", placeholder="", value=3,
                 min=2, max=10, step=1),
 
             dcc.Textarea(
@@ -436,7 +535,7 @@ app.layout = html.Div(style = {'padding-right' : '5%', 'padding-left' : '5%'}, c
                 value="Host Time"),
             
             dcc.Textarea(id="V4_txt2",
-                value = ['Select Desired Feature(s):'],
+                value = ['Select Desired Descriptive Feature(s):'],
                 readOnly = True,
                 style={'width': '100%','backgroundColor': '#f8f8f8', 'justify': 'center', 'display': 'flex','resize': 'none','border':'none'}),
 
@@ -915,7 +1014,7 @@ def update_V1Tile_lvl8_val(V1_Var8Tile):
 @app.callback(
     dash.dependencies.Output(component_id = 'V3_datapoints', component_property = 'value'),
     dash.dependencies.Output(component_id = 'V3_conftable_fig', component_property = 'figure'),
-    [dash.dependencies.Input(component_id = 'V3_groupname', component_property = 'value'),
+    [dash.dependencies.Input(component_id = 'V3_desc', component_property = 'value'),
       dash.dependencies.Input(component_id = 'V3_featconti', component_property = 'value'),
       dash.dependencies.Input(component_id = 'V3_Preproc_Flags', component_property = 'value'),
       dash.dependencies.Input(component_id = 'V3_pcaCompNum_txt', component_property = 'value'),
@@ -929,7 +1028,7 @@ def update_graph(grname, contfeat, preprocflag, Component_num, testproport):
     df_ML = df1[ML_Cols]
     df_ML = df_ML.fillna(df_ML.mean())
     df_Cont = pd.DataFrame(df_ML, columns = contfeat)
-    labels = df_ML[Catlabel]
+    labels = df_ML[Catlabel].tolist()
 
     if 'norm_flag' in preprocflag:
      	# ------------ Normalize
@@ -963,7 +1062,7 @@ def update_graph(grname, contfeat, preprocflag, Component_num, testproport):
     fig = ff.create_annotated_heatmap(cm, 
                                       font_colors=['black'], hoverinfo='text',
                                       colorscale='Viridis')
-    fig.update_layout(title_text= 'Accuracy = '+ str(accuracy_score(y_test, y_pred)))
+    fig.update_layout(title_text= 'Accuracy = '+ str(round(accuracy_score(y_test, y_pred)*100,1)))
     return (datapoints_str, fig)
 
 
