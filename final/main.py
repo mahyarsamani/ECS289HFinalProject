@@ -45,19 +45,21 @@ desc_cols = ['Experiment Name', 'Kernel Version', 'CPU Model', 'Num. of CPUs', '
 ################## VISUALIZATION AND INTERACTION AND DATA ANALYSIS ####################
 
 app = dash.Dash()
-app.layout = html.Div(style = {'background-color' : '#f8f8f8'}, children = [ 
+app.layout = html.Div(style = {'padding-right' : '5%', 'padding-left' : '5%'}, children = [ 
 
     
     ## gem5 logo
-    html.Div(style = {'width' : '100%', 'height' : '30%', 'display' : 'block'}, children = [
-        html.Img(children = 'gem5Logo.png')
+    html.Div(style = {'width' : '100%', 'display' : 'flex', 'justify-content' : 'center'}, children = [
+        html.Div([
+            html.Img(src = 'https://ncaagymnews.weebly.com/uploads/5/7/8/2/57829447/ucdavis-largeheader_3_orig.jpg')
+        ])
     ]),
 
     # ------------------------------------------------------
     # --------------------- Div View 1 ---------------------
     # ------------------------------------------------------ 
     
-    html.Div(style = {'margin-bottom' : '5%'}, children = [ 
+    html.Div(style = {'margin-bottom' : '5%', 'display' : 'flex', 'align-items' : 'center'}, children = [ 
 		html.Div(style = {'width' : '15%', 'height': '100%', 'display' : 'inline-block'}, children = [  
             dcc.Input(
                 id="V1_cVar_selection_msg", type="text",
@@ -107,83 +109,98 @@ app.layout = html.Div(style = {'background-color' : '#f8f8f8'}, children = [
 
     # ---------- Tree Map
     html.Div(style = {'margin-bottom' : '5%'}, children = [    
-        html.Div(style = {'width' : '15%', 'height': '100%', 'display' : 'inline-block'}, children = [
-            dcc.Dropdown(
-                id="V1_Var1_Tile",
-                options=[{'label': i, 'value': i} for i in cat_cols],
-                value= 'Experiment Name'),
-            
-            dcc.Dropdown(
-                id="V1_Var1Tile_lvls",
-                multi=True),
-            
-            dcc.Dropdown(
-                id="V1_Var2_Tile",
-                options=[{'label': i, 'value': i} for i in cat_cols],
-                value= 'Kernel Version'),
+        html.Div(style = {'width' : '100%', 'display' : 'flex'}, children = [
+            html.Div([
+                dcc.Dropdown(
+                    id="V1_Var1_Tile",
+                    options=[{'label': i, 'value': i} for i in cat_cols],
+                    value= 'Experiment Name'),
+                
+                dcc.Dropdown(   
+                    id="V1_Var1Tile_lvls",
+                    multi=True,
+                    style = {'display' : 'inline-block'})
+            ]),
+            html.Div([
+                dcc.Dropdown(
+                    id="V1_Var2_Tile",
+                    options=[{'label': i, 'value': i} for i in cat_cols],
+                    value= 'Kernel Version'),
 
-            dcc.Dropdown(
-                id="V1_Var2Tile_lvls",
-                multi=True),
+                dcc.Dropdown(
+                    id="V1_Var2Tile_lvls",
+                    multi=True)
+            ]),
 
-            dcc.Dropdown(
-                id="V1_Var3_Tile",
-                options=[{'label': i, 'value': i} for i in cat_cols],
-                value= 'Num. of CPUs'),
+            html.Div([
+                dcc.Dropdown(
+                    id="V1_Var3_Tile",
+                    options=[{'label': i, 'value': i} for i in cat_cols],
+                    value= 'Num. of CPUs'),
 
-            dcc.Dropdown(
-                id="V1_Var3Tile_lvls",
-                multi=True),
+                dcc.Dropdown(
+                    id="V1_Var3Tile_lvls",
+                    multi=True)
+            ]),
 
+            html.Div([
+                dcc.Dropdown(
+                    id="V1_Var4_Tile",
+                    options=[{'label': i, 'value': i} for i in cat_cols],
+                    value= 'Boot Type',
+                ),
 
-            dcc.Dropdown(
-                id="V1_Var4_Tile",
-                options=[{'label': i, 'value': i} for i in cat_cols],
-                value= 'Boot Type',
-            ),
+                dcc.Dropdown(
+                    id="V1_Var4Tile_lvls",
+                    multi=True)
+            ]),
 
-            dcc.Dropdown(
-                id="V1_Var4Tile_lvls",
-                multi=True),
+            html.Div([
+                dcc.Dropdown(
+                    id="V1_Var5_Tile",
+                    options=[{'label': i, 'value': i} for i in cat_cols],
+                    value= 'CPU Model'),
 
-            dcc.Dropdown(
-                id="V1_Var5_Tile",
-                options=[{'label': i, 'value': i} for i in cat_cols],
-                value= 'CPU Model'),
+                dcc.Dropdown(
+                    id="V1_Var5Tile_lvls",
+                    multi=True),
+            ]),
 
-            dcc.Dropdown(
-                id="V1_Var5Tile_lvls",
-                multi=True),
+            html.Div([
+                dcc.Dropdown(
+                    id="V1_Var6_Tile",
+                    options=[{'label': i, 'value': i} for i in cat_cols],
+                    value= 'Memory System'),
 
-            dcc.Dropdown(
-                id="V1_Var6_Tile",
-                options=[{'label': i, 'value': i} for i in cat_cols],
-                value= 'Memory System'),
+                dcc.Dropdown(
+                    id="V1_Var6Tile_lvls",
+                    multi=True),
+            ]),
 
-            dcc.Dropdown(
-                id="V1_Var6Tile_lvls",
-                multi=True),
+            html.Div([
+                dcc.Dropdown(
+                    id="V1_Var7_Tile",
+                    options=[{'label': i, 'value': i} for i in cat_cols],
+                    value= 'Input Size'),
 
-            dcc.Dropdown(
-                id="V1_Var7_Tile",
-                options=[{'label': i, 'value': i} for i in cat_cols],
-                value= 'Input Size'),
+                dcc.Dropdown(
+                    id="V1_Var7Tile_lvls",
+                    multi=True),
+            ]),
 
-            dcc.Dropdown(
-                id="V1_Var7Tile_lvls",
-                multi=True),
+            html.Div([
+                dcc.Dropdown(
+                    id="V1_Var8_Tile",
+                    options=[{'label': i,  'value': i} for i in cat_cols],
+                    value= 'Sim. Status Result'),
 
-            dcc.Dropdown(
-                id="V1_Var8_Tile",
-                options=[{'label': i,  'value': i} for i in cat_cols],
-                value= 'Sim. Status Result'),
-
-            dcc.Dropdown(
-                id="V1_Var8Tile_lvls",
-                multi=True)
+                dcc.Dropdown(
+                    id="V1_Var8Tile_lvls",
+                    multi=True)
+            ])
         ]),
         
-        dcc.Graph(id='V1_Graph_Tile', style = {'width' : '75%', 'height': '100%', 'display' : 'inline-block'})
+        dcc.Graph(id='V1_Graph_Tile', style = {'width' : '100%', 'display' : 'inline-block'})
     ]),
 
     
@@ -192,7 +209,7 @@ app.layout = html.Div(style = {'background-color' : '#f8f8f8'}, children = [
     # ------------------------------------------------------
 
     # ---------- Bar Charts
-    html.Div(style = {'margin-bottom' : '5%'}, children = [  
+    html.Div(style = {'margin-bottom' : '5%', 'display' : 'flex', 'align-items' : 'center'}, children = [  
 
         html.Div(style = {'width' : '15%', 'height': '100%', 'display' : 'inline-block'}, children = [
             dcc.Dropdown(
@@ -339,13 +356,13 @@ app.layout = html.Div(style = {'background-color' : '#f8f8f8'}, children = [
 
 
     # -------- PCA
-    html.Div(style = {'margin-bottom' : '5%'}, children = [
+    html.Div(style = {'margin-bottom' : '5%', 'display' : 'flex', 'align-items' : 'center'}, children = [
 		# ---------- Div General settings
-		html.Div(style = {'width' : '40%', 'height': '100%', 'display' : 'inline-block'}, children = [
+		html.Div(style = {'width' : '40%', 'height': '100%', 'display' : 'inline-block', 'margin-right' : '5%'}, children = [
             dcc.Textarea(id="V3_txt1",
                 value = ['Select Desired Group(s):'],
                 readOnly = True,
-                style={'width': '99%','backgroundColor': '#f8f8f8', 'justify': 'center', 'display': 'flex','resize': 'none','border':'none'}),
+                style={'width': '100%','backgroundColor': '#f8f8f8', 'justify': 'center', 'display': 'flex','resize': 'none','border':'none'}),
             
             dcc.Dropdown(
                 id='V3_groupname',
@@ -355,7 +372,7 @@ app.layout = html.Div(style = {'background-color' : '#f8f8f8'}, children = [
             dcc.Textarea(id="V3_txt2",
                 value = ['Select Desired Numerical Feature(s):'],
                 readOnly = True,
-                style={'width': '99%','backgroundColor': '#f8f8f8', 'justify': 'center', 'display': 'flex','resize': 'none','border':'none'}),
+                style={'width': '100%','backgroundColor': '#f8f8f8', 'justify': 'center', 'display': 'flex','resize': 'none','border':'none'}),
 
             dcc.Dropdown(
                     id='V3_featconti',
@@ -371,7 +388,7 @@ app.layout = html.Div(style = {'background-color' : '#f8f8f8'}, children = [
             dcc.Textarea(id="V3_txtyerrng",
                 value = ['Select Desired year range:'],
                 readOnly = True,
-                style={'width': '99%','backgroundColor': '#f8f8f8', 'justify': 'center', 'display': 'flex','resize': 'none','border':'none'}),
+                style={'width': '100%','backgroundColor': '#f8f8f8', 'justify': 'center', 'display': 'flex','resize': 'none','border':'none'}),
             
             dcc.Checklist(
                 id='V3_Preproc_Flags',
@@ -383,7 +400,7 @@ app.layout = html.Div(style = {'background-color' : '#f8f8f8'}, children = [
                 id='V3_pcacompo', type='text', 
                 value = ['Select the number of components between '+ str(2) + ' and ' + str(10)+':'],
                 placeholder="",readOnly = False,
-                style={'width': '99%','backgroundColor': '#f8f8f8', 'float': 'left', 'display': 'block','border':'none','whiteSpace': 'pre-line','height': 30}),
+                style={'width': '100%','backgroundColor': '#f8f8f8', 'float': 'left', 'display': 'block','border':'none','whiteSpace': 'pre-line','height': 30}),
 
             dcc.Input(
                 id="V3_pcaCompNum_txt", type="number", placeholder="", value=5,
@@ -393,7 +410,7 @@ app.layout = html.Div(style = {'background-color' : '#f8f8f8'}, children = [
                 id="V3_datapoints",
                 value = ['Data Points:'],
                 readOnly = True,
-                style={'width': '99%', 'float': 'Center', 'display': 'inline-block','whiteSpace': 'pre-line','resize': 'none','height': 150}),
+                style={'width': '100%', 'float': 'Center', 'display': 'inline-block','whiteSpace': 'pre-line','resize': 'none','height': 150}),
             
             dcc.Textarea(
                 id="V3_txt4",
@@ -421,7 +438,7 @@ app.layout = html.Div(style = {'background-color' : '#f8f8f8'}, children = [
             dcc.Textarea(id="V4_txt2",
                 value = ['Select Desired Feature(s):'],
                 readOnly = True,
-                style={'width': '99%','backgroundColor': '#f8f8f8', 'justify': 'center', 'display': 'flex','resize': 'none','border':'none'}),
+                style={'width': '100%','backgroundColor': '#f8f8f8', 'justify': 'center', 'display': 'flex','resize': 'none','border':'none'}),
 
             dcc.Dropdown(
                 id='V4_feat',
@@ -437,10 +454,10 @@ app.layout = html.Div(style = {'background-color' : '#f8f8f8'}, children = [
                     id="V4_estimate",
                     value = ['Estimated Value:'],
                     readOnly = True,
-                    style={'width': '99%', 'float': 'Center', 'display': 'inline-block','whiteSpace': 'pre-line','resize': 'none','height': 150})
+                    style={'width': '100%', 'float': 'Center', 'display': 'inline-block','whiteSpace': 'pre-line','resize': 'none','height': 150})
 		]),
 
-        html.Div(style = {'width': '50%', 'display': 'inline-block'}, children = [
+        html.Div(style = {'width': '55%', 'display': 'inline-block'}, children = [
             dcc.Graph(
                 id='V3_conftable_fig'
             ),
@@ -448,11 +465,11 @@ app.layout = html.Div(style = {'background-color' : '#f8f8f8'}, children = [
             html.Div([
                 dcc.Graph(
                     id='V4_hist_fig',
-                    style={'width' : '40%', 'display' : 'inline-block'}),
+                    style={'width' : '50%', 'display' : 'inline-block'}),
 
                 dcc.Graph(
                     id='V4_hist_fig2',
-                    style={'width' : '40%', 'display' : 'inline-block'})
+                    style={'width' : '50%', 'display' : 'inline-block'})
             ])
 	    ])
     ])
