@@ -51,7 +51,7 @@ app.layout = html.Div(style = {'padding-right' : '5%', 'padding-left' : '5%'}, c
     ## gem5 logo
     html.Div(style = {'width' : '100%', 'display' : 'flex', 'justify-content' : 'center'}, children = [
         html.Div([
-            html.Img(src = 'https://ncaagymnews.weebly.com/uploads/5/7/8/2/57829447/ucdavis-largeheader_3_orig.jpg')
+            html.Img(src = 'https://www.gem5.org/assets/img/gem5ColorLong.gif')
         ])
     ]),
 
@@ -1059,9 +1059,12 @@ def update_graph(grname, contfeat, preprocflag, Component_num, testproport):
 
     import plotly.figure_factory as ff
 
-    fig = ff.create_annotated_heatmap(cm, 
-                                      font_colors=['black'], hoverinfo='text',
-                                      colorscale='Viridis')
+    fig = ff.create_annotated_heatmap(cm[len(grname)::-1],
+                                      x = grname.tolist(),
+                                      y = grname[len(grname)::-1].tolist(),
+                                      font_colors=['black'], 
+                                      hoverinfo='text',	                                      
+                                      colorscale='Viridis')	                                
     fig.update_layout(title_text= 'Accuracy = '+ str(round(accuracy_score(y_test, y_pred)*100,1)))
     return (datapoints_str, fig)
 
